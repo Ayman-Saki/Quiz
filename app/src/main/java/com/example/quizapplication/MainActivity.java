@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
                 if(email.getText().toString().equals("Rob")&&
                 password.getText().toString().equals("2026")){
                     Intent i1 =new Intent(getApplicationContext(),Quiz1.class);
+                    startActivity(i1);
                 }else{
                     Toast.makeText(MainActivity.this
                             ,"Login or password incorrect !",
