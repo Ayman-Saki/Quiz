@@ -10,14 +10,23 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Firebase;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+
 public class MainActivity2 extends AppCompatActivity {
     EditText name, email, password, confirm;
     Button button;
+    FirebaseAuth myAuth;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -25,6 +34,7 @@ public class MainActivity2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main2);
+        FirebaseApp.initializeApp(getApplicationContext());
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -36,6 +46,7 @@ public class MainActivity2 extends AppCompatActivity {
         password = findViewById(R.id.RegisterPassword);
         confirm = findViewById(R.id.ConfirmPassword);
         button = findViewById(R.id.signbutton);
+        myAuth=FirebaseAuth.getInstance();
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,11 +75,27 @@ public class MainActivity2 extends AppCompatActivity {
                     return;
                 }
 
-                // Success
-                Toast.makeText(MainActivity2.this, "Registration Successful", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainActivity2.this, MainActivity.class);
-                startActivity(intent);
+
             }
         });
     }
+    public void signUp(String mail,String password){
+        myAuth.createUserWithEmailAndPassword(mail,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
+                    Toast.makeText(MainActivity2.this,"Registration Successful",
+                            Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                    finish();
+                }
+                else{
+                    Toast.makeText(MainActivity2.this,"Registration Failed",
+                            Toast.LENGTH_SHORT).show();
+            }
+        }
+
+}
+
+}
 }

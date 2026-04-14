@@ -1,6 +1,12 @@
 package com.example.quizapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +15,12 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class Quiz2 extends AppCompatActivity {
+    RadioGroup rg;
+    RadioButton rb;
+    Button btnNext;
+    String correctResponse = "Jupiter";
+    int score;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,5 +32,31 @@ public class Quiz2 extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        rg = findViewById(R.id.Gr2);
+        btnNext = findViewById(R.id.button3);
+        Intent intent = getIntent();
+        score = intent.getIntExtra("score", 0);
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                    if (rg.getCheckedRadioButtonId() == -1) {
+                        Toast.makeText(Quiz2.this, "Please select an answer", Toast.LENGTH_SHORT).show();
+                    }else{
+                        rb=findViewById(rg.getCheckedRadioButtonId());
+                        if(rb.getText().toString().equals(correctResponse)){
+                            score++;
+                        }
+                        Intent intent = new Intent(getApplicationContext(), Quiz3.class);
+                        intent.putExtra("score", score);
+                        startActivity(intent);
+                        finish();
+                        overridePendingTransition(R.anim.exit,R.anim.entry);
+
+
+                    }
+            }
+            });
+
     }
 }
