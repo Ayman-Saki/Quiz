@@ -18,7 +18,6 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Firebase;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -46,7 +45,7 @@ public class MainActivity2 extends AppCompatActivity {
         password = findViewById(R.id.RegisterPassword);
         confirm = findViewById(R.id.ConfirmPassword);
         button = findViewById(R.id.signbutton);
-        myAuth=FirebaseAuth.getInstance();
+        myAuth = FirebaseAuth.getInstance();
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,27 +74,25 @@ public class MainActivity2 extends AppCompatActivity {
                     return;
                 }
 
-
+                signUp(mail, pass);
             }
         });
     }
-    public void signUp(String mail,String password){
-        myAuth.createUserWithEmailAndPassword(mail,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+
+    public void signUp(String mail, String password) {
+        myAuth.createUserWithEmailAndPassword(mail, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    Toast.makeText(MainActivity2.this,"Registration Successful",
+                if (task.isSuccessful()) {
+                    Toast.makeText(MainActivity2.this, "Registration Successful",
                             Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     finish();
-                }
-                else{
-                    Toast.makeText(MainActivity2.this,"Registration Failed",
+                } else {
+                    Toast.makeText(MainActivity2.this, "Registration Failed: " + task.getException().getMessage(),
                             Toast.LENGTH_SHORT).show();
+                }
             }
-        }
-
-}
-
-}
+        });
+    }
 }
